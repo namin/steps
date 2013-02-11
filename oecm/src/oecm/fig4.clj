@@ -5,9 +5,9 @@
 
 ;; Figure 4: The original language semantics expressed as composition rules
 
-(=set-tuple-at =*evaluators* <symbol> (=subr (fn [[exp] env] (=env-get env exp))))
+(=set-tuple-at =*evaluators* <symbol> (=new-<subr> (fn [[exp] env] (=env-get env exp))))
 
-(=set-tuple-at =*evaluators* <number> (=subr (fn [[exp] env] exp)))
+(=set-tuple-at =*evaluators* <number> (=new-<subr> (fn [[exp] env] exp)))
 
 (defn =evlis [es env]
   (map #(=eval % env) es))

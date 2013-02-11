@@ -7,7 +7,9 @@
   (swap! t assoc k v))
 (defn =tuple-at [t k]
   (get @t k))
-
+(defn =reset-tuple [t & vs]
+  (doseq [i (range 0 (count vs)) v vs]
+    (=set-tuple-at t i v)))
 ;; Built-in non-aggregate types
 (def <symbol> 0)
 (def <number> 1)
@@ -54,5 +56,8 @@
                      (=set-tuple-at value# ~i field-value#)))))
          (range 0 (count fields))
          fields)
+     (defn ~(symbol (str '=new- `~name)) [~@fields]
+       (let [self# (=new ~name)]
+         (=reset-tuple self# ~@fields)
+         self#))
      '~name))
-
