@@ -7,7 +7,7 @@
         [oecm.fig6]))
 
 (defn =op [op]
-  (=new-<subr> (fn [args env] (apply op args))))
+  (fn [args env] (apply op args)))
 
 (defn =env-from [env bindings]
   (=env-extend env (map first bindings) (map second bindings)))
@@ -19,4 +19,17 @@
        (~'- ~(=op -))
        (~'* ~(=op *))
        (~'/ ~(=op /))
+
+       (~'let ~(=new-<fixed>
+                 (=new-<form>
+                   (fn [[bindings body] env]
+                     (cond
+                       (empty? bindings)
+                       (=eval body env)
+                       (empty? (rest bindings))
+                       (=error "let requires an even number of forms in binding vector")
+                       :else
+                       (recur
+                         [(rest (rest bindings)) body]
+                         (=env-extend env [(first bindings)] [(second bindings)])))))))
      )))

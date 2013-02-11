@@ -14,7 +14,8 @@
 (def <symbol> 0)
 (def <number> 1)
 (def <list> 2)
-(def number-of-built-in-non-aggregate-types 3)
+(def <subr> 3)
+(def number-of-built-in-non-aggregate-types 4)
 
 ;; Creation of typed objects
 (defn =new [type]
@@ -26,6 +27,7 @@
     (symbol? value) <symbol>
     (number? value) <number>
     (list? value) <list>
+    (fn? value) <subr>
     :else (=tuple-at value 'type)))
 
 ;; Figure 2: Adding aggregate types

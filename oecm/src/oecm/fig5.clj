@@ -9,5 +9,5 @@
 (=define-type <form> (function))
 
 (=set-tuple-at =*applicators* <form>
-  (fn [fun args env]
+  (fn [[fun args] env]
     (=eval (=apply (<form>-function fun) args env) env)))

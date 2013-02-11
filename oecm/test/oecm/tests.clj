@@ -7,13 +7,20 @@
         [oecm.fig6]
         [oecm.init]
     :reload)
-  (:use clojure.test))
+  (:use clojure.test)
+  (:use clojure.tools.trace)
+)
 
-(deftest test-basic-eval-1
+;(trace-vars oecm.fig3/=eval oecm.fig3/=apply)
+
+(deftest test-eval-1
   (is (= (=eval 5 =empty-env) 5))
   (is (= (=eval 'x (=env-extend =empty-env ['x] [5])) 5)))
 
-(deftest test-env-eval-2
+(deftest test-app-1
   (is (= (=eval '(+ 1 2) =default-env) 3))
   (is (= (=eval '(- 1) =default-env)) -1)
   (is (= (=eval '(* 1 2 3 4) =default-env) 24)))
+
+(deftest test-form-1
+  (is (= (=eval '(let [foo 1] foo) =default-env) 1)))

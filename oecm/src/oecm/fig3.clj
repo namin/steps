@@ -7,9 +7,9 @@
 (def =*applicators* (=tuple))
 
 ;; Built-in aggregate types
-(=define-type <subr> (implementation))
-(defn =subr? [exp]
-  (= <subr> (=type-of exp)))
+(defn <subr>-implementation [f] f)
+(defn subr? [exp]
+  (fn? exp))
 (=define-type <expr> (formals body environment))
 (=define-type <fixed> (function))
 
@@ -18,6 +18,6 @@
   (=apply (=tuple-at =*evaluators* (=type-of exp)) (list exp) env))
 
 (defn =apply [fun args env]
-  (if (=subr? fun)
+  (if (subr? fun)
     ((<subr>-implementation fun) args env)
     (=apply (=tuple-at =*applicators* (=type-of fun)) (list fun args env) env)))
