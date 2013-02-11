@@ -13,6 +13,6 @@
     (set-<form>-function self function)
     self))
 
-(=set-tuple-at *applicators* <form>
+(=set-tuple-at =*applicators* <form>
   (fn [fun args env]
     (=eval (=apply (<form>-function fun) args env) env)))
