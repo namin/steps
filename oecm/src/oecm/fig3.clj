@@ -15,9 +15,9 @@
 
 ;; Figure 3: Generalized assignment of meaning to expressions
 (defn =eval [exp env]
-  (=apply (=tuple-at =*evaluators* (=type-of exp)) (list exp) env))
+  (=apply (=tuple-at =*evaluators* (=type-of exp)) exp env))
 
 (defn =apply [fun args env]
   (if (subr? fun)
     ((<subr>-implementation fun) args env)
-    (=apply (=tuple-at =*applicators* (=type-of fun)) (list fun args env) env)))
+    (=apply (=tuple-at =*applicators* (=type-of fun)) [fun args] env)))

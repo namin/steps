@@ -8,8 +8,8 @@
 (defn =tuple-at [t k]
   (get @t k))
 (defn =reset-tuple [t & vs]
-  (doseq [i (range 0 (count vs)) v vs]
-    (=set-tuple-at t i v)))
+  (dotimes [i (count vs)]
+    (=set-tuple-at t i (nth vs i))))
 ;; Built-in non-aggregate types
 (def <symbol> 0)
 (def <number> 1)

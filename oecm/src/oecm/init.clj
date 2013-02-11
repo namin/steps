@@ -32,4 +32,9 @@
                        (recur
                          [(rest (rest bindings)) body]
                          (=env-extend env [(first bindings)] [(second bindings)])))))))
+
+       (~'fn ~(=new-<fixed>
+                (=new-<form>
+                  (fn [[formals body] env]
+                    (=new-<expr> formals body env)))))
      )))
