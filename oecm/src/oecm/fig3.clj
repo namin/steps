@@ -8,6 +8,10 @@
 
 ;; Built-in aggregate types
 (=define-type <subr> (implementation))
+(defn =subr [implementation]
+  (let [self (=new <subr>)]
+    (set-<subr>-implementation self implementation)
+    self))
 (defn =subr? [exp]
   (= <subr> (=type-of exp)))
 (=define-type <expr> (formals body environment))
@@ -19,7 +23,7 @@
 
 ;; Figure 3: Generalized assignment of meaning to expressions
 (defn =eval [exp env]
-  (=apply (=tuple-at =*evaluators* (=type-of exp)) (list exp env) env))
+  (=apply (=tuple-at =*evaluators* (=type-of exp)) (list exp) env))
 
 (defn =apply [fun args env]
   (if (=subr? fun)

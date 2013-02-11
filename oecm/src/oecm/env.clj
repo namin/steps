@@ -1,6 +1,7 @@
 (ns oecm.env)
 
 ;; Environments
+(def =empty-env (hash-map))
 (defn =env-get [env k]
   (get env k))
 (defn =env-extend [env vs args]
