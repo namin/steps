@@ -6,12 +6,17 @@
         [oecm.fig5]
         [oecm.fig6]))
 
-(defn =binop [op]
-  (=new-<subr> (fn [[a b] env] (op a b))))
+(defn =op [op]
+  (=new-<subr> (fn [args env] (apply op args))))
 
 (defn =env-from [env bindings]
   (=env-extend env (map first bindings) (map second bindings)))
 
 (def =default-env
   (=env-from =empty-env
-    `((~'+ ~(=binop +)))))
+    `(
+       (~'+ ~(=op +))
+       (~'- ~(=op -))
+       (~'* ~(=op *))
+       (~'/ ~(=op /))
+     )))

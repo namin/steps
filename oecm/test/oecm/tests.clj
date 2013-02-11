@@ -14,5 +14,6 @@
   (is (= (=eval 'x (=env-extend =empty-env ['x] [5])) 5)))
 
 (deftest test-env-eval-2
-  (is (= (=eval '(+ 1 2) =default-env) 3)))
-
+  (is (= (=eval '(+ 1 2) =default-env) 3))
+  (is (= (=eval '(- 1) =default-env)) -1)
+  (is (= (=eval '(* 1 2 3 4) =default-env) 24)))
