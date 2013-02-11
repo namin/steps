@@ -14,7 +14,7 @@
 (=set-tuple-at *evaluators* <list>
   (fn [exp env]
     (let [fun (=eval (first exp) env)]
-      (if (= (type-of fun) <fixed>)
+      (if (= (=type-of fun) <fixed>)
         (=apply (<fixed>-function fun) (rest exp) env)
         (=apply fun (=evlis (rest exp) env) env)))))
 

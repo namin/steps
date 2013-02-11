@@ -53,5 +53,6 @@
                    (and (= ~name (=type-of value#))
                      (=set-tuple-at value# ~i field-value#)))))
          (range 0 (count fields))
-         fields)))
+         fields)
+     '~name))
 
