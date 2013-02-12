@@ -37,4 +37,13 @@
                 (=new-<form>
                   (fn [[formals body] env]
                     (=new-<expr> formals body env)))))
+
+       (~'do ~(=new-<fixed>
+                (=new-<form>
+                  (fn [[first & rest] env]
+                    (if (empty? rest)
+                      (=eval first env)
+                      (do
+                        (=eval first env)
+                        (recur rest env)))))))
      )))

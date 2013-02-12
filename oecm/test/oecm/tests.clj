@@ -25,4 +25,5 @@
 (deftest test-form-1
   (is (= (=eval '(let [foo 1] foo) =default-env) 1))
   (is (= (=eval '(let [foo 1 bar 2] (+ foo bar)) =default-env) 3))
-  (is (= (=eval '((fn [x] x) 0) =default-env) 0)))
+  (is (= (=eval '((fn [x] x) 0) =default-env) 0))
+  (is (= (=eval '(do 1 2) =default-env) 2)))
