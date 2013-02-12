@@ -26,7 +26,7 @@
   (cond
     (symbol? value) <symbol>
     (number? value) <number>
-    (list? value) <list>
+    (seq? value) <list>
     (fn? value) <subr>
     :else (=tuple-at value 'type)))
 

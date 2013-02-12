@@ -20,8 +20,8 @@
        (~'* ~(=op *))
        (~'/ ~(=op /))
 
-       (~'let ~(=new-<fixed>
-                 (fn [[bindings body] env]
+       (~'let_ ~(=new-<fixed>
+                  (fn [[bindings body] env]
                    (cond
                      (empty? bindings)
                      (=eval body env)
@@ -31,10 +31,14 @@
                      (recur
                        [(rest (rest bindings)) body]
                        (=env-extend env [(first bindings)] [(second bindings)]))))))
+       (~'let ~(=new-<fixed> (=new-<form> (fn [[bindings & body] env]
+                                            `(~'let_ ~bindings (~'do ~@body))))))
 
-       (~'fn ~(=new-<fixed>
-                (fn [[formals body] env]
-                  (=new-<expr> formals body env))))
+       (~'fn_ ~(=new-<fixed>
+                 (fn [[formals body] env]
+                   (=new-<expr> formals body env))))
+       (~'fn ~(=new-<fixed> (=new-<form> (fn [[formals & body] env]
+                                           `(~'fn_ ~formals (~'do ~@body))))))
 
        (~'do ~(=new-<fixed>
                 (fn [[first & rest] env]
