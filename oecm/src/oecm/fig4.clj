@@ -22,5 +22,3 @@
   (fn [[fun args] env]
     (=eval (<expr>-body fun) (=env-extend (<expr>-environment fun) (<expr>-formals fun) args))))
 
-(=set-tuple-at =*evaluators* <expr> (fn [exp env] exp))
-

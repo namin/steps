@@ -21,29 +21,26 @@
        (~'/ ~(=op /))
 
        (~'let ~(=new-<fixed>
-                 (=new-<form>
-                   (fn [[bindings body] env]
-                     (cond
-                       (empty? bindings)
-                       (=eval body env)
-                       (empty? (rest bindings))
-                       (=error "let requires an even number of forms in binding vector")
-                       :else
-                       (recur
-                         [(rest (rest bindings)) body]
-                         (=env-extend env [(first bindings)] [(second bindings)])))))))
+                 (fn [[bindings body] env]
+                   (cond
+                     (empty? bindings)
+                     (=eval body env)
+                     (empty? (rest bindings))
+                     (=error "let requires an even number of forms in binding vector")
+                     :else
+                     (recur
+                       [(rest (rest bindings)) body]
+                       (=env-extend env [(first bindings)] [(second bindings)]))))))
 
        (~'fn ~(=new-<fixed>
-                (=new-<form>
-                  (fn [[formals body] env]
-                    (=new-<expr> formals body env)))))
+                (fn [[formals body] env]
+                  (=new-<expr> formals body env))))
 
        (~'do ~(=new-<fixed>
-                (=new-<form>
-                  (fn [[first & rest] env]
-                    (if (empty? rest)
+                (fn [[first & rest] env]
+                  (if (empty? rest)
+                    (=eval first env)
+                    (do
                       (=eval first env)
-                      (do
-                        (=eval first env)
-                        (recur rest env)))))))
+                      (recur rest env))))))
      )))

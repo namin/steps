@@ -22,7 +22,7 @@
   (is (= (=eval '(- 1) =default-env)) -1)
   (is (= (=eval '(* 1 2 3 4) =default-env) 24)))
 
-(deftest test-form-1
+(deftest test-fixed-1
   (is (= (=eval '(let [foo 1] foo) =default-env) 1))
   (is (= (=eval '(let [foo 1 bar 2] (+ foo bar)) =default-env) 3))
   (is (= (=eval '((fn [x] x) 0) =default-env) 0))
