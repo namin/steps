@@ -12,22 +12,17 @@
 (defn =make-selector [name]
   (=new-<selector> name (=tuple)))
 
-(defmacro =define-selector [name]
-  `(def ~name (make-selector '~name)))
-
 (defn %add-method [self type method]
   (=set-tuple-at (<selector>-methods self) type method))
-
-(defmacro =define-method [selector type args & body]
-  `(%add-method ~selector ~type (fn [self ~@args] ~@body)))
 
 (defn =error [& args]
   (throw (Error. (apply str args))))
 
 (=set-tuple-at =*applicators* <selector>
-  (fn [self & arguments]
+  (fn [[self arguments] env]
     (=apply
-      (or
+       (or
         (=tuple-at (<selector>-methods self) (=type-of (first arguments)))
         (=error "no method in " (<selector>-name self) " for " (=type-of (first arguments))))
-      arguments)))
+      arguments
+      env)))

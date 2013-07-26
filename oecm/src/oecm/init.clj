@@ -47,4 +47,21 @@
                     (do
                       (=eval first env)
                       (recur rest env))))))
+
+       (~'quote ~(=new-<fixed>
+                  (fn [[datum] env]
+                    datum)))
+
+       (~'<number> ~<number>)
+       (~'<symbol> ~<symbol>)
+
+       (~'with-selector ~(=new-<fixed>
+                          (fn [[name & body] env]
+                            (=eval `(~'do ~@body) (=env-extend env [name] [(=make-selector name)])))))
+
+       (~'define-method ~(=new-<fixed>
+                          (fn [[selector type args & body] env]
+                            (%add-method (=eval selector env)
+                                         (=eval type env)
+                                         (=eval `(~'fn ~args ~@body) env)))))
      )))
