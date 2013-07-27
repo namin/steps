@@ -62,3 +62,14 @@
                       (numberof 'x 'y 3)))
                 =default-env)
          6)))
+
+(deftest test-generic-2
+  (is (= (=eval '(with-generic numberof
+                   (define-multimethod numberof [[<number>] [x y z]] x)
+                   (define-multimethod numberof [[<number> <number>] [x y z]] y)
+                   (define-multimethod numberof [[<number> <number> <number>] [x y z]] z)
+                   (+ (numberof 1 2 3)
+                      (numberof 4 5 'z)
+                      (numberof 6 'y 'z)))
+                =default-env)
+         14)))

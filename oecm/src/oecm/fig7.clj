@@ -12,29 +12,32 @@
 (defn =make-generic [name]
   (=new-<generic> name (=tuple)))
 
+(defn =set-default-<generic>-method [mm method]
+  (=set-tuple-at mm 'default method))
+
+(defn =get-default-<generic>-method [mm]
+  (=tuple-at mm 'default))
+
 (defn %add-multimethod [mm types method]
-  (if (empty? types)
-    (set-<generic>-methods mm method)
-    (letfn [(add! [methods types]
-              (if (empty? (rest types))
-                (=set-tuple-at methods (first types) method)
-                (recur (do
-                         (when (not (=tuple-at methods (first types)))
-                           (=set-tuple-at methods (first types) (=tuple)))
-                         (=tuple-at methods (first types)))
-                       (rest types))))]
-      (add! (do
-              (when (not (<generic>-methods mm))
-                (set-<generic>-methods mm (=tuple)))
-              (<generic>-methods mm))
-            types))))
+  (letfn [(add! [methods types]
+            (if (empty? types)
+              (=set-default-<generic>-method methods method)
+              (recur (do
+                       (when (not (=tuple-at methods (first types)))
+                         (=set-tuple-at methods (first types) (=tuple)))
+                       (=tuple-at methods (first types)))
+                     (rest types))))]
+    (add! (<generic>-methods mm)
+          types)))
 
 (=set-tuple-at =*applicators* <generic>
   (fn [[self arguments] env]
     (letfn [(to-method [method args]
-              (if (or (empty? args) (not (=raw-tuple? method)))
-                method
-                (recur (=tuple-at method (=type-of (first args)))
-                       (rest args))))]
+              (if (empty? args)
+                (=get-default-<generic>-method method)
+                (let [next-method (=tuple-at method (=type-of (first args)))]
+                  (if (not next-method)
+                    (=get-default-<generic>-method method)
+                    (recur next-method (rest args))))))]
       (=apply (to-method (<generic>-methods self) arguments) arguments env))))
 
