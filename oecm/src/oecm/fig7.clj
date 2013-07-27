@@ -32,12 +32,13 @@
 
 (=set-tuple-at =*applicators* <generic>
   (fn [[self arguments] env]
-    (letfn [(to-method [method args]
-              (if (empty? args)
-                (=get-default-<generic>-method method)
-                (let [next-method (=tuple-at method (=type-of (first args)))]
-                  (if (not next-method)
-                    (=get-default-<generic>-method method)
-                    (recur next-method (rest args))))))]
-      (=apply (to-method (<generic>-methods self) arguments) arguments env))))
+    (letfn [(to-method [method spec-default args]
+              (let [next-spec-default (or (=get-default-<generic>-method method) spec-default)]
+                (if (empty? args)
+                  next-spec-default
+                  (let [next-method (=tuple-at method (=type-of (first args)))]
+                    (if (not next-method)
+                      next-spec-default
+                      (recur next-method next-spec-default (rest args)))))))]
+      (=apply (to-method (<generic>-methods self) false arguments) arguments env))))
 
