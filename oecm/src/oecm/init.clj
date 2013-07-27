@@ -4,7 +4,8 @@
         [oecm.fig3]
         [oecm.fig4]
         [oecm.fig5]
-        [oecm.fig6]))
+        [oecm.fig6]
+        [oecm.fig7]))
 
 (defn =op [op]
   (fn [args env] (apply op args)))
@@ -64,4 +65,14 @@
                             (%add-method (=eval selector env)
                                          (=eval type env)
                                          (=eval `(~'fn ~args ~@body) env)))))
+       (~'with-generic ~(=new-<fixed>
+                          (fn [[name & body] env]
+                            (=eval `(~'do ~@body) (=env-extend env [name] [(=make-generic name)])))))
+
+       (~'define-multimethod ~(=new-<fixed>
+                               (fn [[mm [types args] & body] env]
+                                 (%add-multimethod (=eval mm env)
+                                                   (map #(=eval % env) types)
+                                                   (=eval `(~'fn ~args ~@body) env)))))
+
      )))

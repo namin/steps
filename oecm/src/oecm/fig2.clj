@@ -10,6 +10,9 @@
 (defn =reset-tuple [t & vs]
   (dotimes [i (count vs)]
     (=set-tuple-at t i (nth vs i))))
+(defn =raw-tuple? [x]
+  (and (instance? clojure.lang.Atom x)
+       (not (=tuple-at x 'type))))
 ;; Built-in non-aggregate types
 (def <symbol> 0)
 (def <number> 1)

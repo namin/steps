@@ -5,6 +5,7 @@
         [oecm.fig4]
         [oecm.fig5]
         [oecm.fig6]
+        [oecm.fig7]
         [oecm.init]
     :reload)
   (:use clojure.test)
@@ -51,3 +52,13 @@
                 =default-env)
          4)))
 
+(deftest test-generic-1
+  (is (= (=eval '(with-generic numberof
+                   (define-multimethod numberof [[<number>] [x y z]] x)
+                   (define-multimethod numberof [[<symbol> <number>] [x y z]] y)
+                   (define-multimethod numberof [[<symbol> <symbol> <number>] [x y z]] z)
+                   (+ (numberof 1 2 3)
+                      (numberof 'x 2 3)
+                      (numberof 'x 'y 3)))
+                =default-env)
+         6)))
